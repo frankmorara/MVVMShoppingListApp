@@ -15,17 +15,25 @@ import com.frankmorara.mvvmshoppinglist.ui.shoppinglist.ShoppingViewModel
 import com.frankmorara.mvvmshoppinglist.ui.shoppinglist.ShoppingViewModelFactory
 import kotlinx.android.synthetic.main.activity_shopping.*
 import kotlinx.coroutines.InternalCoroutinesApi
+import org.kodein.di.KodeinAware
+import org.kodein.di.generic.instance
 
-class MainActivity : AppCompatActivity() {
+class ShoppingActivity : AppCompatActivity(), KodeinAware {
+
+    override val kodein by kodein()
+    private val factory: ShoppingViewModelFactory by instance()
+
+    lateinit var viewModel: ShoppingViewModel
+
     @InternalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_shopping)
 
-        val database = ShoppingDatabase(this)
-        val repository = ShoppingRepository(database as ShoppingDatabase)
-        val factory = ShoppingViewModelFactory(repository)
-        val viewModel = ViewModelProvider(this,factory)
+//        val database = ShoppingDatabase(this)
+//        val repository = ShoppingRepository(database as ShoppingDatabase)
+//        val factory = ShoppingViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,factory)
                 .get(ShoppingViewModel::class.java)
 
         val adapter = ShoppingItemAdapter(listOf(),viewModel)
